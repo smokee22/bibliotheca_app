@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bibliotheca — Районная Библиотека</title>
+  <style>
+    :root {
+      --umber: #8C6046;
+      --umber-dark: #6e4a35;
+      --parchment: #F1E4CC;
+      --parchment-light: #FAF5EC;
+      --rosewood: #96584E;
+      --rosewood-dark: #7a453c;
+      --sage: #798165;
+      --sage-dark: #5e654d;
+      --ink: #2C2725;
+      --ink-soft: #463f3c;
+      --danger: #991B1B;
+      --danger-bg: #FDF2F2;
+
+      --border: #DFD0B8;
+      --white: #FFFFFF;
+      --shadow-sm: 0 4px 12px rgba(44, 39, 37, 0.08);
+      --shadow-md: 0 12px 28px rgba(44, 39, 37, 0.14);
+      --shadow-book: -6px 8px 18px rgba(44, 39, 37, 0.25);
+      --radius: 14px;
+      --transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body.dark-theme {
+      --umber: #A47551;
+      --umber-dark: #8C6046;
+      --parchment: #3A322C;
+      --parchment-light: #1E1A18;
+      --rosewood: #B26A5E;
+      --rosewood-dark: #96584E;
+      --sage: #8A9473;
+      --sage-dark: #798165;
+      --ink: #F3ECE1;
+      --ink-soft: #D4C5B9;
+      --danger: #EF4444;
+      --danger-bg: #451A03;
+      --border: #4A3E37;
+      --white: #26211E;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--parchment-light);
+      background-image: radial-gradient(rgba(140, 96, 70, 0.08) 1px, transparent 0);
+      background-size: 24px 24px;
+      color: var(--ink);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Top Navbar */
+    .navbar {
+      background-color: var(--ink);
+      color: var(--parchment);
+      border-bottom: 2px solid var(--umber);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      padding: 12px 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .nav-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--parchment);
+    }
+
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--umber), var(--rosewood));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border: 1px solid rgba(241, 228, 204, 0.35);
+    }
+
+    .logo-text {
+      font-family: "Georgia", serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: var(--parchment);
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: rgba(241, 228, 204, 0.1);
+      border: 1px solid rgba(241, 228, 204, 0.25);
+      color: var(--parchment);
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      background: rgba(241, 228, 204, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      background: rgba(241, 228, 204, 0.08);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid rgba(241, 228, 204, 0.2);
+      gap: 6px;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--parchment);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      opacity: 0.65;
+      transition: var(--transition);
+    }
+
+    .lang-btn svg {
+      width: 22px;
+      height: 15px;
+      border-radius: 3px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+      flex-shrink: 0;
+    }
+
+    .lang-btn:hover {
+      opacity: 1;
+      background: rgba(241, 228, 204, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .lang-btn.active {
+      opacity: 1;
+      background: linear-gradient(135deg, var(--umber), var(--rosewood));
+      border-color: rgba(241, 228, 204, 0.45);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Hero Banner */
+    .hero {
+      position: relative;
+      background: 
+        linear-gradient(180deg, rgba(44, 39, 37, 0.82) 0%, rgba(44, 39, 37, 0.92) 100%),
+        repeating-linear-gradient(
+          90deg,
+          var(--umber) 0px, var(--umber) 28px,
+          var(--rosewood) 28px, var(--rosewood) 54px,
+          var(--sage) 54px, var(--sage) 82px,
+          var(--ink-soft) 82px, var(--ink-soft) 110px
+        );
+      color: var(--parchment);
+      text-align: center;
+      padding: 40px 20px 45px;
+      border-bottom: 5px solid var(--rosewood);
+      box-shadow: 0 10px 30px rgba(44, 39, 37, 0.18);
+    }
+
+    .hero-content {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(241, 228, 204, 0.14);
+      border: 1px solid rgba(241, 228, 204, 0.3);
+      color: var(--parchment);
+      padding: 5px 16px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-family: "Georgia", serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      color: #FFF9EE;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      color: var(--parchment);
+      opacity: 0.9;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* Main Content Wrapper */
+    .main-wrapper {
+      max-width: 1220px;
+      width: 100%;
+      margin: -25px auto 50px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+      flex: 1;
+    }
+
+    /* Counters Dashboard */
+    .counters-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .counter-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .counter-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--parchment);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .counter-info h4 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--ink-soft);
+      margin-bottom: 2px;
+    }
+
+    .counter-value {
+      font-family: "Georgia", serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* Backup / Export Toolbar */
+    .backup-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Add Book Panel */
+    .add-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--umber);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 30px;
+    }
+
+    .add-panel-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--parchment);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .add-panel-header h2 {
+      font-family: "Georgia", serif;
+      font-size: 1.2rem;
+      color: var(--ink);
+    }
+
+    .form-lang-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--parchment-light);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .form-tab-btn {
+      padding: 5px 12px;
+      border: none;
+      background: transparent;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 6px;
+      color: var(--ink-soft);
+      transition: var(--transition);
+    }
+
+    .form-tab-btn.active {
+      background: var(--umber);
+      color: var(--white);
+      box-shadow: 0 2px 6px rgba(140, 96, 70, 0.3);
+    }
+
+    .form-lang-pane {
+      display: none;
+    }
+
+    .form-lang-pane.active {
+      display: block;
+    }
+
+    .add-form-grid {
+      display: grid;
+      grid-template-columns: 2fr 2fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .add-form-row-bottom {
+      display: grid;
+      grid-template-columns: 2fr 3fr auto;
+      gap: 14px;
+      align-items: end;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+    }
+
+    @media (max-width: 900px) {
+      .add-form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .add-form-row-bottom {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-group label span {
+      color: var(--rosewood);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--parchment-light);
+      color: var(--ink);
+      font-size: 0.93rem;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      background: var(--white);
+      border-color: var(--umber);
+      box-shadow: 0 0 0 4px rgba(140, 96, 70, 0.14);
+    }
+
+    .error-banner {
+      display: none;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #FECACA;
+      border-left: 4px solid var(--rosewood);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .error-banner.visible {
+      display: block;
+    }
+
+    /* Filter & Sort Toolbar */
+    .filter-toolbar {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+
+    .search-box input {
+      padding-left: 38px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      pointer-events: none;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      min-width: 160px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+      height: 44px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(0.97);
+    }
+
+    .btn-umber {
+      background: linear-gradient(135deg, var(--umber), var(--umber-dark));
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(140, 96, 70, 0.35);
+      width: 100%;
+    }
+
+    .btn-sage {
+      background: linear-gradient(135deg, var(--sage), var(--sage-dark));
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(121, 129, 101, 0.3);
+    }
+
+    .btn-rosewood {
+      background: linear-gradient(135deg, var(--rosewood), var(--rosewood-dark));
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(150, 88, 78, 0.3);
+    }
+
+    .btn-parchment {
+      background: var(--parchment);
+      color: var(--ink);
+      border: 1px solid var(--border);
+    }
+
+    .btn-delete {
+      background: var(--white);
+      color: var(--rosewood);
+      border: 1.5px solid #E5C5C0;
+      padding: 8px 12px;
+      height: auto;
+    }
+
+    .btn-delete:hover {
+      background: var(--danger-bg);
+      border-color: var(--rosewood);
+    }
+
+    .btn-edit {
+      background: var(--white);
+      color: var(--umber);
+      border: 1.5px solid var(--border);
+      padding: 8px 12px;
+      height: auto;
+    }
+
+    .btn-edit:hover {
+      background: var(--parchment-light);
+      border-color: var(--umber);
+    }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.83rem;
+      height: 38px;
+    }
+
+    /* Section Heading */
+    .section-heading {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      font-family: "Georgia", serif;
+      font-size: 1.75rem;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .section-divider {
+      width: 70px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--umber), var(--rosewood), var(--sage));
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    /* Books Grid */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 26px;
+    }
+
+    .book-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .book-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--umber);
+    }
+
+    /* Cover Stage */
+    .book-cover-stage {
+      background: var(--parchment);
+      padding: 24px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .book-status-ribbon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+    }
+
+    .ribbon-available { background: var(--sage); color: var(--white); }
+    .ribbon-borrowed { background: var(--rosewood); color: var(--white); }
+    .ribbon-overdue { background: var(--danger); color: var(--white); }
+
+    /* 3D Book Cover */
+    .book-cover {
+      width: 132px;
+      height: 184px;
+      border-radius: 4px 10px 10px 4px;
+      padding: 16px 14px 14px 18px;
+      color: var(--parchment);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: var(--shadow-book);
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: transform 0.3s ease;
+    }
+
+    .book-card:hover .book-cover {
+      transform: scale(1.04) rotate(-1deg);
+    }
+
+    .book-cover::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 11px;
+      background: linear-gradient(90deg, rgba(0,0,0,0.35), rgba(255,255,255,0.15), rgba(0,0,0,0.2));
+      border-radius: 4px 0 0 4px;
+    }
+
+    .book-cover-inner {
+      border: 1px solid rgba(241, 228, 204, 0.35);
+      height: 100%;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+    }
+
+    .cover-title {
+      font-family: "Georgia", serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #FFF9EE;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .cover-author {
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--parchment);
+      opacity: 0.9;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .cover-theme-0 { background: linear-gradient(145deg, var(--umber), var(--umber-dark)); }
+    .cover-theme-1 { background: linear-gradient(145deg, var(--rosewood), var(--rosewood-dark)); }
+    .cover-theme-2 { background: linear-gradient(145deg, var(--sage), var(--sage-dark)); }
+    .cover-theme-3 { background: linear-gradient(145deg, var(--ink-soft), var(--ink)); }
+
+    /* Book Body Info */
+    .book-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .book-title {
+      font-family: "Georgia", serif;
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .book-author {
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .book-meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .book-tag {
+      background: var(--parchment-light);
+      border: 1px solid var(--border);
+      color: var(--umber-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .book-description {
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+      margin-bottom: 14px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .borrow-box {
+      background: #FDF7F5;
+      border: 1px solid #EBD3CE;
+      border-left: 3px solid var(--rosewood);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      color: var(--ink);
+      margin-bottom: 14px;
+      line-height: 1.45;
+    }
+
+    .borrow-box.overdue-warning {
+      background: var(--danger-bg);
+      border-color: #FECACA;
+      border-left-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .book-footer {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--parchment);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .book-footer .main-action {
+      flex: 1;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--white);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--ink-soft);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--ink);
+      color: var(--parchment);
+      text-align: center;
+      padding: 26px 20px;
+      border-top: 4px solid var(--umber);
+      font-size: 0.88rem;
+    }
+
+    footer span { opacity: 0.8; }
+
+    /* Modal Backdrop & Windows */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 39, 37, 0.68);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: 5px solid var(--umber);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 480px;
+      padding: 26px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+      animation: popUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes popUp {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal h3 {
+      font-family: "Georgia", serif;
+      font-size: 1.3rem;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .modal-book-info {
+      font-size: 0.9rem;
+      color: var(--umber-dark);
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--parchment);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .details-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+      font-size: 0.92rem;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .details-item {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--parchment);
+    }
+
+    .details-label { font-weight: 700; color: var(--ink-soft); }
+    .details-value { color: var(--ink); text-align: right; }
+
+    .details-desc-box {
+      background: var(--parchment-light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 0.88rem;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    .borrowers-sublist {
+      background: var(--parchment-light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 8px;
+    }
+
+    .borrower-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.84rem;
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .borrower-row:last-child { border-bottom: none; }
+    .borrower-row.overdue-row { color: var(--danger); font-weight: 600; }
+
+    /* Members List Styling inside Modal */
+    .member-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--parchment-light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .member-item-row:hover {
+      background: var(--white);
+      border-color: var(--umber);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-badge">🏛️</div>
+        <span class="logo-text">Bibliotheca</span>
+      </a>
+
+      <div class="nav-controls">
+        <!-- Members List Button in Header -->
+        <button type="button" class="nav-btn" onclick="openMembersModal()">👥 <span id="lblNavMembers">Читатели</span></button>
+
+        <!-- Theme Toggle -->
+        <button type="button" class="nav-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Сменить тему">🌙 Dark</button>
+
+        <!-- 3 Visible Flags Language Switcher -->
+        <div class="lang-switcher" role="group" aria-label="Language switcher">
+          <button type="button" class="lang-btn active" data-lang="ru" title="Русский">
+            <svg viewBox="0 0 9 6"><rect fill="#fff" width="9" height="6"/><rect fill="#0039a6" y="2" width="9" height="4"/><rect fill="#d52b1e" y="4" width="9" height="2"/></svg>
+            <span>РУ</span>
+          </button>
+          <button type="button" class="lang-btn" data-lang="hy" title="Հայերեն">
+            <svg viewBox="0 0 3 2"><path fill="#d90012" d="M0 0h3v2H0z"/><path fill="#0033a0" d="M0 .67h3v1.33H0z"/><path fill="#f2a800" d="M0 1.33h3V2H0z"/></svg>
+            <span>ՀԱՅ</span>
+          </button>
+          <button type="button" class="lang-btn" data-lang="en" title="English">
+            <svg viewBox="0 0 60 30"><clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+            <span>ENG</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow" id="uiHeroBadge">Цифровой архив • Библиотечный фонд и читатели</div>
+      <h1 id="uiHeroTitle">Добро пожаловать в Bibliotheca</h1>
+      <p id="uiHeroSubtitle">Умный учет экземпляров, живой поиск, база читателей, лимиты выдачи, история и бэкап.</p>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="main-wrapper">
+    <!-- Backup Toolbar (Export & Import) -->
+    <div class="backup-toolbar">
+      <button type="button" class="btn btn-parchment btn-sm" onclick="exportBackup()">💾 <span id="lblExport">Экспорт базы</span></button>
+      <label class="btn btn-parchment btn-sm" style="cursor: pointer; margin-bottom: 0;">
+        📂 <span id="lblImport">Импорт базы</span>
+        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackup(event)" />
+      </label>
+    </div>
+
+    <!-- Counters Dashboard -->
+    <div class="counters-bar">
+      <div class="counter-card">
+        <div class="counter-icon">📚</div>
+        <div class="counter-info">
+          <h4 id="lblCntTotal">Всего книг</h4>
+          <div class="counter-value" id="cntTotalBooks">0</div>
+        </div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-icon">🟢</div>
+        <div class="counter-info">
+          <h4 id="lblCntAvail">Доступно</h4>
+          <div class="counter-value" id="cntAvailBooks">0</div>
+        </div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-icon">📖</div>
+        <div class="counter-info">
+          <h4 id="lblCntBorrow">На руках</h4>
+          <div class="counter-value" id="cntBorrowBooks">0</div>
+        </div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-icon">⚠️</div>
+        <div class="counter-info">
+          <h4 id="lblCntOverdue">Просрочено</h4>
+          <div class="counter-value" id="cntOverdueBooks" style="color: var(--danger);">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Book Panel -->
+    <section class="add-panel" id="addSection">
+      <div class="add-panel-header">
+        <h2 id="uiAddTitle">📖 Добавить книгу в фонд</h2>
+        <div class="form-lang-tabs">
+          <button type="button" class="form-tab-btn active" onclick="switchFormLang('ru')">Русский</button>
+          <button type="button" class="form-tab-btn" onclick="switchFormLang('hy')">Հայերեն</button>
+          <button type="button" class="form-tab-btn" onclick="switchFormLang('en')">English</button>
+        </div>
+      </div>
+
+      <div id="formError" class="error-banner"></div>
+
+      <form id="addBookForm" novalidate>
+        <!-- Russian Pane -->
+        <div class="form-lang-pane active" id="pane_ru">
+          <div class="add-form-grid">
+            <div class="form-group">
+              <label id="lblTitleRu">Название (RU) <span>*</span></label>
+              <input type="text" id="title_ru" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblAuthorRu">Автор (RU) <span>*</span></label>
+              <input type="text" id="author_ru" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblGenreRu">Жанр (RU)</label>
+              <input type="text" id="genre_ru" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblDescRu">Описание (RU)</label>
+              <input type="text" id="desc_ru" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Armenian Pane -->
+        <div class="form-lang-pane" id="pane_hy">
+          <div class="add-form-grid">
+            <div class="form-group">
+              <label id="lblTitleHy">Վերնագիր (HY) <span>*</span></label>
+              <input type="text" id="title_hy" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblAuthorHy">Հեղինակ (HY) <span>*</span></label>
+              <input type="text" id="author_hy" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblGenreHy">Ժանր (HY)</label>
+              <input type="text" id="genre_hy" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblDescHy">Նկարագրություն (HY)</label>
+              <input type="text" id="desc_hy" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <!-- English Pane -->
+        <div class="form-lang-pane" id="pane_en">
+          <div class="add-form-grid">
+            <div class="form-group">
+              <label id="lblTitleEn">Title (EN) <span>*</span></label>
+              <input type="text" id="title_en" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblAuthorEn">Author (EN) <span>*</span></label>
+              <input type="text" id="author_en" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblGenreEn">Genre (EN)</label>
+              <input type="text" id="genre_en" autocomplete="off" />
+            </div>
+            <div class="form-group">
+              <label id="lblDescEn">Description (EN)</label>
+              <input type="text" id="desc_en" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Common fields -->
+        <div class="add-form-row-bottom">
+          <div class="form-group">
+            <label id="lblYear">Год издания</label>
+            <input type="number" id="bookYear" placeholder="1965" />
+          </div>
+          <div class="form-group">
+            <label id="lblQuantity">Количество (шт.)</label>
+            <input type="number" id="bookQuantity" value="3" min="1" max="1000" />
+          </div>
+          <button type="submit" class="btn btn-umber" id="uiAddBtn">Добавить книгу</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Search, Filter & Sorting Toolbar -->
+    <div class="filter-toolbar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" autocomplete="off" />
+      </div>
+
+      <div class="filter-group">
+        <select id="genreFilter" class="filter-select">
+          <option value="all">Все жанры</option>
+        </select>
+
+        <select id="statusFilter" class="filter-select">
+          <option value="all">Все статусы</option>
+          <option value="available">Доступные</option>
+          <option value="borrowed">Выданные</option>
+          <option value="overdue">Просроченные</option>
+        </select>
+
+        <select id="sortSelect" class="filter-select">
+          <option value="title">Сортировка: По названию</option>
+          <option value="author">Сортировка: По автору</option>
+          <option value="duedate">Сортировка: По сроку сдачи</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Book Showcase Grid -->
+    <section>
+      <div class="section-heading">
+        <h2 id="uiCatalogTitle">Книжный фонд библиотеки</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="books-grid" id="bookList"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <span id="uiFooterText">Bibliotheca — Система учета районной библиотеки</span>
+  </footer>
+
+  <!-- Modal: Members List -->
+  <div class="modal-backdrop" id="membersModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="uiModalMembersTitle">👥 Читатели библиотеки</h3>
+      <div class="modal-book-info" id="uiModalMembersSub">Нажмите на читателя для просмотра его книг</div>
+
+      <div id="memberModalError" class="error-banner"></div>
+
+      <!-- Add member inside modal -->
+      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+        <input type="text" id="modalNewMemberInput" placeholder="Имя нового читателя..." autocomplete="off" />
+        <button type="button" class="btn btn-sage btn-sm" id="uiModalAddMemberBtn" onclick="addMemberFromModal()" style="white-space: nowrap;">+ Добавить</button>
+      </div>
+
+      <div class="details-list" id="modalMembersContainer" style="max-height: 260px;"></div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-parchment btn-sm" onclick="closeMembersModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Member Details (Books borrowed by specific member) -->
+  <div class="modal-backdrop" id="memberDetailsModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="uiMemberDetailsTitle">👤 Карточка читателя</h3>
+      <div class="modal-book-info" id="memberDetailsName"></div>
+
+      <div class="details-list" id="memberDetailsContent" style="max-height: 280px;"></div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-parchment btn-sm" onclick="closeMemberDetailsModal()">Назад</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Borrow Book -->
+  <div class="modal-backdrop" id="borrowModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="uiModalTitle">Выдать книгу читателю</h3>
+      <div class="modal-book-info" id="modalBookName"></div>
+
+      <div id="borrowError" class="error-banner"></div>
+
+      <form id="borrowForm" novalidate>
+        <input type="hidden" id="borrowBookId" />
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label id="uiLabelBorrower">Выберите читателя <span>*</span></label>
+          <select id="borrowerSelect" class="filter-select" style="width: 100%;"></select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label id="uiLabelNewBorrower">Или добавьте нового читателя</label>
+          <input type="text" id="newBorrowerName" placeholder="Имя Фамилия" autocomplete="off" />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-parchment btn-sm" id="uiCancelBtn" onclick="closeModal()">Отмена</button>
+          <button type="submit" class="btn btn-sage btn-sm" id="uiConfirmBorrowBtn">Подтвердить выдачу</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Book Details -->
+  <div class="modal-backdrop" id="detailsModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="uiDetailsTitle">📖 Информация о книге</h3>
+      <div class="details-list" id="detailsContent"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-parchment btn-sm" id="uiCloseDetailsBtn" onclick="closeDetailsModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Book -->
+  <div class="modal-backdrop" id="editModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="uiEditTitle">✏️ Редактировать книгу</h3>
+      <div id="editError" class="error-banner"></div>
+      <form id="editForm" novalidate>
+        <input type="hidden" id="editBookId" />
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label id="lblEditTitle">Название книги</label>
+          <input type="text" id="editTitleInput" required autocomplete="off" />
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label id="lblEditAuthor">Автор</label>
+          <input type="text" id="editAuthorInput" required autocomplete="off" />
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label id="lblEditYear">Год издания</label>
+          <input type="number" id="editYearInput" autocomplete="off" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-parchment btn-sm" onclick="closeEditModal()">Отмена</button>
+          <button type="submit" class="btn btn-umber btn-sm" id="uiSaveEditBtn">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Custom Delete / Alert Confirmation -->
+  <div class="modal-backdrop" id="deleteModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="uiDeleteTitle">🗑️ Подтверждение удаления</h3>
+      <p class="modal-book-info" id="uiDeleteText" style="border: none; margin-bottom: 0; padding-bottom: 0;"></p>
+      <input type="hidden" id="deleteBookId" />
+      <div class="modal-actions">
+        <button type="button" class="btn btn-parchment btn-sm" id="uiDeleteCancelBtn" onclick="closeDeleteModal()">Отмена</button>
+        <button type="button" class="btn btn-rosewood btn-sm" id="uiDeleteConfirmBtn" onclick="confirmDeleteBook()">Удалить</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const uiDict = {
+      ru: {
+        heroBadge: "Цифровой архив • Библиотечный фонд и читатели",
+        heroTitle: "Добро пожаловать в Bibliotheca",
+        heroSubtitle: "Умный учет экземпляров, живой поиск, база читателей, лимиты выдачи, история и бэкап.",
+        navMembers: "Читатели",
+        membersModalTitle: "👥 Читатели библиотеки",
+        membersModalSub: "Нажмите на читателя для просмотра взятых книг (лимит: макс. 3)",
+        addMemberPh: "Имя нового читателя...",
+        addMemberBtn: "+ Добавить",
+        errMemberHasBooks: "Нельзя удалить читателя, пока у него на руках есть невозвращенные книги!",
+        memberDetailsTitle: "👤 Карточка читателя",
+        noBooksBorrowed: "У этого читателя нет книг на руках.",
+        addTitle: "📖 Добавить книгу в фонд",
+        lblTitle: "Название книги",
+        lblAuthor: "Автор",
+        lblYear: "Год издания",
+        lblQuantity: "Количество (шт.)",
+        lblGenre: "Жанр",
+        lblDesc: "Описание книги",
+        addBtn: "Добавить книгу",
+        catalogTitle: "Книжный фонд библиотеки",
+        empty: "Книги не найдены. Измените параметры поиска или фильтры.",
+        available: "Доступна",
+        borrowed: "Выданы",
+        overdue: "Просрочена",
+        borrowersList: "Список текущих читателей:",
+        noBorrowers: "Никто не брал экземпляры",
+        historyList: "История выдач книги:",
+        noHistory: "История пуста",
+        borrower: "Читатель",
+        borrowDate: "Выдана",
+        dueDate: "Вернуть до",
+        pcs: "шт.",
+        availableLeft: "доступно:",
+        year: "Год издания",
+        genre: "Жанр",
+        description: "Описание",
+        status: "Статус",
+        totalQty: "Всего в фонде",
+        borrowBtn: "Выдать экземпляр",
+        returnBtn: "Вернуть",
+        deleteBtn: "Удалить",
+        editBtn: "Редактировать",
+        modalTitle: "Выдать книгу читателю",
+        detailsTitle: "📖 Карточка книги",
+        editTitleModal: "✏️ Редактировать книгу",
+        deleteTitle: "🗑️ Подтверждение удаления",
+        labelBorrower: "Выберите читателя",
+        labelNewBorrower: "Или добавьте нового читателя",
+        cancelBtn: "Отмена",
+        confirmBorrowBtn: "Подтвердить выдачу",
+        closeBtn: "Закрыть",
+        saveBtn: "Сохранить",
+        footerText: "Bibliotheca — Система учета районной библиотеки",
+        errTitleAuthor: "Заполните название и автора хотя бы на одном языке.",
+        errBorrower: "Пожалуйста, выберите или введите имя читателя.",
+        errLimit: "Лимит превышен: у этого читателя уже на руках 3 книги (максимум)!",
+        errBorrowedDel: "Нельзя удалить книгу, пока её экземпляры находятся на руках у читателей.",
+        confirmDelMsg: "Вы уверены, что хотите удалить эту книгу из фонда?",
+        allBorrowedAlert: "Все экземпляры этой книги уже выданы!",
+        searchPlaceholder: "Поиск по названию или автору...",
+        allGenres: "Все жанры",
+        allStatuses: "Все статусы",
+        filterAvailable: "Доступные",
+        filterBorrowed: "Выданные",
+        filterOverdue: "Просроченные",
+        sortTitle: "Сортировка: По названию",
+        sortAuthor: "Сортировка: По автору",
+        sortDueDate: "Сортировка: По сроку сдачи",
+        lblCntTotal: "Всего книг",
+        lblCntAvail: "Доступно",
+        lblCntBorrow: "На руках",
+        lblCntOverdue: "Просрочено",
+        phTitle: "Например: Дюна",
+        phAuthor: "Фрэнк Герберт",
+        phGenre: "Фантастика",
+        phDesc: "Краткое описание сюжета...",
+        exportBtn: "Экспорт базы",
+        importBtn: "Импорт базы"
+      },
+      hy: {
+        heroBadge: "Գրադարանի արխիվ • Գրքային ֆոնդ և ընթերցողներ",
+        heroTitle: "Բարի գալուստ Bibliotheca",
+        heroSubtitle: "Օրինակների խելացի հաշվառում, որոնում, ընթերցողների բազա, լիմիտներ, պատմություն և բեքափ։",
+        navMembers: "Ընթերցողներ",
+        membersModalTitle: "👥 Գրադարանի ընթերցողներ",
+        membersModalSub: "Սեղմեք ընթերցողի վրա՝ վերցրած գրքերը տեսնելու համար (լիմիտ՝ առավելագույնը 3)",
+        addMemberPh: "Նոր ընթերցողի անունը...",
+        addMemberBtn: "+ Ավելացնել",
+        errMemberHasBooks: "Հնարավոր չէ ջնջել ընթերցողին, քանի դեռ նա ունի չվերադարձված գրքեր:",
+        memberDetailsTitle: "👤 Ընթերցողի տեղեկագիր",
+        noBooksBorrowed: "Այս ընթերցողը գրքեր չունի:",
+        addTitle: "📖 Ավելացնել գիրք ֆոնդում",
+        lblTitle: "Գրքի վերնագիրը",
+        lblAuthor: "Հեղինակ",
+        lblYear: "Տարեթիվ",
+        lblQuantity: "Քանակ (հատ)",
+        lblGenre: "Ժանր",
+        lblDesc: "Նկարագրություն",
+        addBtn: "Ավելացնել գիրքը",
+        catalogTitle: "Գրադարանի գրքային ֆոնդը",
+        empty: "Գրքեր չեն գտնվել։ Փոխեք որոնման պայմանները կամ զտիչները։",
+        available: "Առկա է",
+        borrowed: "Տրված են",
+        overdue: "Ժամկետանց",
+        borrowersList: "Ընթացիկ ընթերցողներ:",
+        noBorrowers: "Ոչ ոք չի վերցրել օրինակներ",
+        historyList: "Գրքի տրամադրման պատմություն:",
+        noHistory: "Պատմությունը դատարկ է",
+        borrower: "Ընթերցող",
+        borrowDate: "Տրված է",
+        dueDate: "Վերադարձնել մինչև",
+        pcs: "հատ",
+        availableLeft: "առկա է՝",
+        year: "Տարեթիվ",
+        genre: "Ժանր",
+        description: "Նկարագրություն",
+        status: "Կարգավիճակ",
+        totalQty: "Ընդհանուր ֆոնդում",
+        borrowBtn: "Տրամադրել օրինակ",
+        returnBtn: "Վերադարձնել",
+        deleteBtn: "Ջնջել",
+        editBtn: "Խմբագրել",
+        modalTitle: "Տրամադրել գիրքը ընթերցողին",
+        detailsTitle: "📖 Գրքի տեղեկագիր",
+        editTitleModal: "✏️ Խմբագրել գիրքը",
+        deleteTitle: "🗑️ Ջնջման հաստատում",
+        labelBorrower: "Ընտրեք ընթերցողին",
+        labelNewBorrower: "Կամ ավելացրեք նոր ընթերցող",
+        cancelBtn: "Չեղարկել",
+        confirmBorrowBtn: "Հաստատել",
+        closeBtn: "Փակել",
+        saveBtn: "Պահպանել",
+        footerText: "Bibliotheca — Թաղային գրադարանի համակարգ",
+        errTitleAuthor: "Լրացրեք վերնագիրը և հեղինակը գոնե մեկ լեզվով։",
+        errBorrower: "Խնդրում ենք ընտրել կամ մուտքագրել ընթերցողի անունը։",
+        errLimit: "Սահմանաչափը գերազանցված է. այս ընթերցողն արդեն ունի 3 գիրք (առավելագույնը)!",
+        errBorrowedDel: "Հնարավոր չէ ջնջել, քանի դեռ գրքի օրինակները գտնվում են ընթերցողների մոտ։",
+        confirmDelMsg: "Համոզված՞ եք, որ ցանկանում եք ջնջել այս գիրքը ֆոնդից:",
+        allBorrowedAlert: "Այս գրքի բոլոր օրինակներն արդեն տրված են!",
+        searchPlaceholder: "Որոնել ըստ վերնագրի կամ հեղինակի...",
+        allGenres: "Բոլոր ժանրերը",
+        allStatuses: "Բոլոր կարգավիճակները",
+        filterAvailable: "Առկա",
+        filterBorrowed: "Տրված",
+        filterOverdue: "Ժամկետանց",
+        sortTitle: "Տեսակավորում: Ըստ վերնագրի",
+        sortAuthor: "Տեսակավորում: Ըստ հեղինակի",
+        sortDueDate: "Տեսակավորում: Ըստ ժամկետի",
+        lblCntTotal: "Ընդհանուր",
+        lblCntAvail: "Առկա",
+        lblCntBorrow: "Տրված",
+        lblCntOverdue: "Ժամկետանց",
+        phTitle: "Օրինակ՝ Դյունա",
+        phAuthor: "Ֆրենկ Հերբերտ",
+        phGenre: "Ֆանտաստիկա",
+        phDesc: "Համառոտ նկարագրություն...",
+        exportBtn: "Արտահանել բազան",
+        importBtn: "Ներմուծել բազան"
+      },
+      en: {
+        heroBadge: "Digital Archive • Library Collection & Members",
+        heroTitle: "Welcome to Bibliotheca",
+        heroSubtitle: "Smart copies tracking, members database, borrowing limits, history, and backup.",
+        navMembers: "Members",
+        membersModalTitle: "👥 Library Members",
+        membersModalSub: "Click on a member to view borrowed books (limit: max 3)",
+        addMemberPh: "New member name...",
+        addMemberBtn: "+ Add",
+        errMemberHasBooks: "Cannot remove member while they still have unreturned books!",
+        memberDetailsTitle: "👤 Member Details",
+        noBooksBorrowed: "This member has no books currently borrowed.",
+        addTitle: "📖 Add a Book to Collection",
+        lblTitle: "Book Title",
+        lblAuthor: "Author",
+        lblYear: "Year",
+        lblQuantity: "Total Copies",
+        lblGenre: "Genre",
+        lblDesc: "Description",
+        addBtn: "Add Book",
+        catalogTitle: "Library Book Collection",
+        empty: "No books found. Try changing your search query or filters.",
+        available: "Available",
+        borrowed: "Borrowed",
+        overdue: "Overdue",
+        borrowersList: "Current Borrowers:",
+        noBorrowers: "No copies currently borrowed",
+        historyList: "Book Borrowing History:",
+        noHistory: "No history records yet",
+        borrower: "Borrower",
+        borrowDate: "Borrowed",
+        dueDate: "Due date",
+        pcs: "pcs",
+        availableLeft: "available:",
+        year: "Year",
+        genre: "Genre",
+        description: "Description",
+        status: "Status",
+        totalQty: "Total in stock",
+        borrowBtn: "Borrow Copy",
+        returnBtn: "Return",
+        deleteBtn: "Delete",
+        editBtn: "Edit",
+        modalTitle: "Borrow Book to Reader",
+        detailsTitle: "📖 Book Details",
+        editTitleModal: "✏️ Edit Book",
+        deleteTitle: "🗑️ Confirm Deletion",
+        labelBorrower: "Select Borrower",
+        labelNewBorrower: "Or Add New Borrower",
+        cancelBtn: "Cancel",
+        confirmBorrowBtn: "Confirm Borrow",
+        closeBtn: "Close",
+        saveBtn: "Save",
+        footerText: "Bibliotheca — Neighborhood Library Management System",
+        errTitleAuthor: "Please fill in title and author in at least one language.",
+        errBorrower: "Please select or enter the borrower's name.",
+        errLimit: "Limit exceeded: this reader already has 3 books checked out (maximum)!",
+        errBorrowedDel: "Cannot delete a book while its copies are currently borrowed.",
+        confirmDelMsg: "Are you sure you want to delete this book from the collection?",
+        allBorrowedAlert: "All copies of this book are currently borrowed!",
+        searchPlaceholder: "Search by title or author...",
+        allGenres: "All Genres",
+        allStatuses: "All Statuses",
+        filterAvailable: "Available",
+        filterBorrowed: "Borrowed",
+        filterOverdue: "Overdue",
+        sortTitle: "Sort by Title",
+        sortAuthor: "Sort by Author",
+        sortDueDate: "Sort by Due Date",
+        lblCntTotal: "Total Books",
+        lblCntAvail: "Available",
+        lblCntBorrow: "Borrowed",
+        lblCntOverdue: "Overdue",
+        phTitle: "e.g. Dune",
+        phAuthor: "Frank Herbert",
+        phGenre: "Sci-Fi",
+        phDesc: "Short description...",
+        exportBtn: "Export DB",
+        importBtn: "Import DB"
+      }
+    };
+
+    function isOverdue(dueDateStr) {
+      if (!dueDateStr) return false;
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const due = new Date(dueDateStr);
+      due.setHours(0,0,0,0);
+      return today > due;
+    }
+
+    function bookHasOverdue(book) {
+      if (!book.borrowers || book.borrowers.length === 0) return false;
+      return book.borrowers.some(b => isOverdue(b.dueDate));
+    }
+
+    const initialBooksData = [
+      {
+        id: "b1", year: "1965", quantity: 3, theme: 0, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Дюна", author: "Фрэнк Герберт", genre: "Фантастика", description: "Эпический научно-фантастический шедевр на пустынной планете Арракис." },
+          hy: { title: "Դյունա", author: "Ֆրենկ Հերբերտ", genre: "Ֆանտաստիկա", description: "Էպիկական գիտաֆանտաստիկ գլուխգործոց Արաակիս անապատային մոլորակի մասին:" },
+          en: { title: "Dune", author: "Frank Herbert", genre: "Sci-Fi", description: "Epic science fiction masterpiece set on the desert planet Arrakis." }
+        }
+      },
+      {
+        id: "b2", year: "1886", quantity: 2, theme: 1, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Самвел", author: "Раффи", genre: "Исторический", description: "Исторический роман о событиях IV века в Армении." },
+          hy: { title: "Սամվել", author: "Ռաֆֆի", genre: "Պատմական", description: "Պատմական վեպ հայոց 4-րդ դարի իրադարձությունների մասին:" },
+          en: { title: "Samvel", author: "Raffi", genre: "Historical", description: "Historical novel about the events of the 4th century in Armenia." }
+        }
+      },
+      {
+        id: "b3", year: "1949", quantity: 5, theme: 2, borrowers: [], history: [],
+        translations: {
+          ru: { title: "1984", author: "Джордж Оруэлл", genre: "Антиутопия", description: "Классический роман-предостережение о тоталитарном обществе." },
+          hy: { title: "1984", author: "Ջորջ Օրուել", genre: "Անտիուտոպիա", description: "Դասական հակաուտոպիական վեպ տոտալիտար հասարակության մասին:" },
+          en: { title: "1984", author: "George Orwell", genre: "Dystopia", description: "Classic dystopian social science fiction and cautionary tale." }
+        }
+      },
+      {
+        id: "b4", year: "1967", quantity: 2, theme: 3, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Мастер и Маргарита", author: "Михаил Булгаков", genre: "Классика", description: "Философский роман, сочетающий мистику и сатиру." },
+          hy: { title: "Վարպետը և Մարգարիտան", author: "Միխայիլ Բուլգակով", genre: "Դասական", description: "Փիլիսոփայական վեպ, որը միավորում է միստիկան և սատիրան:" },
+          en: { title: "The Master and Margarita", author: "Mikhail Bulgakov", genre: "Classic", description: "Philosophical novel blending supernatural elements with Soviet satire." }
+        }
+      },
+      {
+        id: "b5", year: "1943", quantity: 4, theme: 0, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Маленький принц", author: "Антуан де Сент-Экзюпери", genre: "Философия", description: "Поэтическая сказка-притча об одиночестве, дружбе и любви." },
+          hy: { title: "Փոքրիկ Իշխանը", author: "Անտուան դը Սենտ-Էքզյուպերի", genre: "Փիլիսոփայություն", description: "Պոետիկ հեքիաթ միայնության, ընկերության և սիրո մասին:" },
+          en: { title: "The Little Prince", author: "Antoine de Saint-Exupéry", genre: "Philosophy", description: "A poetic tale of loneliness, friendship, love, and loss." }
+        }
+      },
+      {
+        id: "b6", year: "1866", quantity: 2, theme: 1, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Преступление и наказание", author: "Фёдор Достоевский", genre: "Классика", description: "Глубокий психологический анализ преступления и мук совести." },
+          hy: { title: "Ոճիր և պատիժ", author: "Ֆյոդոր Դոստոևսկի", genre: "Դասական", description: "Հոգեբանական խորը վերլուծություն հանցագործության և խղճի խայթի մասին:" },
+          en: { title: "Crime and Punishment", author: "Fyodor Dostoevsky", genre: "Classic", description: "Exploration of the moral dilemmas of premeditated murder." }
+        }
+      },
+      {
+        id: "b7", year: "1937", quantity: 3, theme: 2, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Хоббит", author: "Джон Р. Р. Толкин", genre: "Фэнтези", description: "Удивительное путешествие Бильбо Бэггинса по Средиземью." },
+          hy: { title: "Հոբիտ", author: "Ջոն Ռ. Ռ. Թոլքին", genre: "Ֆենտեզի", description: "Բիլբո Բագինսի զարմանահրաշ ճանապարհորդությունը Միջերկրքում:" },
+          en: { title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy", description: "The adventures of Bilbo Baggins in Middle-earth." }
+        }
+      },
+      {
+        id: "b8", year: "1953", quantity: 3, theme: 3, borrowers: [], history: [],
+        translations: {
+          ru: { title: "451 градус по Фаренгейту", author: "Рэй Брэдбери", genre: "Фантастика", description: "Мир будущего, в котором книги безжалостно сжигаются." },
+          hy: { title: "Ֆարհենհայթով 451 աստիճան", author: "Ռեյ Բրեդբերի", genre: "Ֆանտաստիկա", description: "Ապագայի աշխարհ, որտեղ գրքերն անողոք կերպով այրվում են:" },
+          en: { title: "Fahrenheit 451", author: "Ray Bradbury", genre: "Sci-Fi", description: "A futuristic society where books are outlawed and burned." }
+        }
+      },
+      {
+        id: "b9", year: "1881", quantity: 2, theme: 0, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Хентер (Безумец)", author: "Раффи", genre: "Исторический", description: "Роман об армянском национально-освободительном движении." },
+          hy: { title: "Խենթը", author: "Ռաֆֆի", genre: "Պատմական", description: "Վեպ հայ ազգային-ազատագրական պայքարի մասին:" },
+          en: { title: "The Fool", author: "Raffi", genre: "Historical", description: "Novel about the Armenian national liberation movement." }
+        }
+      },
+      {
+        id: "b10", year: "1895", quantity: 4, theme: 1, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Гикор", author: "Ованес Туманян", genre: "Драма", description: "Трагическая история крестьянского мальчика, уехавшего в город." },
+          hy: { title: "Գիքորը", author: "Հովհաննես Թումանյան", genre: "Դրամա", description: "Գյուղացի տղայի դառը ճակատագրի պատմությունը քաղաքում:" },
+          en: { title: "Gikor", author: "Hovhannes Tumanyan", genre: "Drama", description: "The tragic story of a peasant boy who went to the city." }
+        }
+      },
+      {
+        id: "b11", year: "2008", quantity: 3, theme: 2, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Чистый код", author: "Роберт Мартин", genre: "Программирование", description: "Руководство по созданию и рефакторингу качественного кода." },
+          hy: { title: "Մաքուր կոդ", author: "Ռոբերտ Մարտին", genre: "Ծրագրավորում", description: "Ձեռնարկ ճարտարապետության և որակյալ ծրագրավորման մասին:" },
+          en: { title: "Clean Code", author: "Robert C. Martin", genre: "Programming", description: "A handbook of agile software craftsmanship." }
+        }
+      },
+      {
+        id: "b12", year: "1925", quantity: 2, theme: 3, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Великий Гэтсби", author: "Фрэнсис Скотт Фицджеральд", genre: "Классика", description: "Портрет «эпохи джаза» во всем ее блеске и трагизме." },
+          hy: { title: "Մեծն Գեթսբի", author: "Ֆրենսիս Սքոթ Ֆիցջերալդ", genre: "Դասական", description: "«Ջազի դարաշրջանի» դիմանկարը իր շքեղությամբ և ողբերգությամբ:" },
+          en: { title: "The Great Gatsby", author: "F. Scott Fitzgerald", genre: "Classic", description: "A portrait of the Jazz Age in all its decadence and excess." }
+        }
+      },
+      {
+        id: "b13", year: "1936", quantity: 3, theme: 0, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Три товарища", author: "Эрих Мария Ремарк", genre: "Роман", description: "История фронтовой дружбы и любви в послевоенной Германии." },
+          hy: { title: "Երեք ընկեր", author: "Էրիխ Մարիա Ռեմարկ", genre: "Վեպ", description: "Ընկերության և սիրո պատմություն հետպատերազմյան Գերմանիայում:" },
+          en: { title: "Three Comrades", author: "Erich Maria Remarque", genre: "Romance", description: "A powerful novel of friendship and love in post-WWI Germany." }
+        }
+      },
+      {
+        id: "b14", year: "1951", quantity: 3, theme: 1, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Над пропастью во ржи", author: "Джером Сэлинджер", genre: "Классика", description: "Культовая книга о проблемах взросления и юношеском бунте." },
+          hy: { title: "Տարեկանի արտում, ժայռի եզրին", author: "Ջերոմ Սելինջեր", genre: "Դասական", description: "Պատանեկան ապստամբության և ներքին ճգնաժամի խորհրդանիշ:" },
+          en: { title: "The Catcher in the Rye", author: "J.D. Salinger", genre: "Classic", description: "A timeless story of teenage alienation and angst." }
+        }
+      },
+      {
+        id: "b15", year: "1997", quantity: 5, theme: 2, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Гарри Поттер и философский камень", author: "Дж. К. Роулинг", genre: "Фэнтези", description: "Первая книга о приключениях юного волшебника в школе Хогвартс." },
+          hy: { title: "Հարրի Փոթերը և փիլիսոփայական քարը", author: "Ջ. Ք. Ռոուլինգ", genre: "Ֆենտեզի", description: "Երիտասարդ հրաշագործի արկածների մասին պատմող առաջին գիրքը:" },
+          en: { title: "Harry Potter and the Philosopher's Stone", author: "J.K. Rowling", genre: "Fantasy", description: "The first novel in the Harry Potter series about a young wizard." }
+        }
+      },
+      {
+        id: "b16", year: "1844", quantity: 2, theme: 3, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Граф Монте-Кристо", author: "Александр Дюма", genre: "Приключения", description: "Захватывающая история несправедливо осужденного Эдмона Дантеса." },
+          hy: { title: "Կոմս Մոնտե-Քրիստո", author: "Ալեքսանդր Դյումա", genre: "Արկածային", description: "Անարդարացիորեն դատապարտված Էդմոն Դանտեսի հուզիչ պատմությունը:" },
+          en: { title: "The Count of Monte Cristo", author: "Alexandre Dumas", genre: "Adventure", description: "An adventure novel of betrayal, imprisonment, and vengeance." }
+        }
+      },
+      {
+        id: "b17", year: "1988", quantity: 4, theme: 0, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Алхимик", author: "Пауло Коэльо", genre: "Философия", description: "Роман-притча о поиске своего жизненного пути и предназначения." },
+          hy: { title: "Ալքիմիկոսը", author: "Պաուլո Կոելյո", genre: "Փիլիսոփայություն", description: "Առակ-վեպ սեփական ճակատագիրն ու կոչումը գտնելու մասին:" },
+          en: { title: "The Alchemist", author: "Paulo Coelho", genre: "Philosophy", description: "A novel about a young shepherd journeying to find treasure." }
+        }
+      },
+      {
+        id: "b18", year: "1869", quantity: 2, theme: 1, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Война и мир", author: "Лев Толстой", genre: "Классика", description: "Монументальный роман-эпопея о судьбах людей в эпоху наполеоновских войн." },
+          hy: { title: "Պատերազմ և խաղաղություն", author: "Լև Տոլստոյ", genre: "Դասական", description: "Մոնումենտալ վեպ-էպոպեա նապոլեոնյան պատերազմների դարաշրջանի մասին:" },
+          en: { title: "War and Peace", author: "Leo Tolstoy", genre: "Classic", description: "An epic novel chronicling the French invasion of Russia." }
+        }
+      },
+      {
+        id: "b19", year: "1960", quantity: 3, theme: 2, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Убить пересмешника", author: "Харпер Ли", genre: "Классика", description: "История о справедливости, расовых предрассудках и взрослении на Юге США." },
+          hy: { title: "Ծաղրասարյակ սպանելը", author: "Հարփըր Լի", genre: "Դասական", description: "Արդարության և բարոյականության մասին պատմություն ԱՄՆ-ի հարավում:" },
+          en: { title: "To Kill a Mockingbird", author: "Harper Lee", genre: "Classic", description: "A novel addressing racial injustice and moral growth in the American South." }
+        }
+      },
+      {
+        id: "b20", year: "2011", quantity: 4, theme: 3, borrowers: [], history: [],
+        translations: {
+          ru: { title: "Sapiens: Краткая история человечества", author: "Юваль Ной Харари", genre: "История", description: "Увлекательный рассказ об эволюции человека разумного." },
+          hy: { title: "Sapiens. Մարդկության համառոտ պատմությունը", author: "Յուվալ Նոյ Հարարի", genre: "Պատմություն", description: "Հետաքրքիր պատմություն բանական մարդու էվոլյուցիայի մասին:" },
+          en: { title: "Sapiens: A Brief History of Humankind", author: "Yuval Noah Harari", genre: "History", description: "A survey of the history of humankind from the Stone Age to the present." }
+        }
+      }
+    ];
+
+    let currentLang = "ru";
+    let isDarkMode = false;
+    let books = [];
+    let members = ["Анна Саргсян", "Армен Петросян", "Мариам Григорян", "Давид Ованнисян", "Елена Арутюнян"];
+    const STORAGE_KEY = "bibliotheca_books_topbtn_v1";
+    const MEMBERS_KEY = "bibliotheca_members_topbtn_v1";
+
+    function t(key) {
+      return uiDict[currentLang][key] || key;
+    }
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.body.classList.toggle("dark-theme", isDarkMode);
+      const btn = document.getElementById("themeToggleBtn");
+      btn.textContent = isDarkMode ? "☀️ Light" : "🌙 Dark";
+    }
+
+    function updateTexts() {
+      document.getElementById("uiHeroBadge").textContent = t("heroBadge");
+      document.getElementById("uiHeroTitle").textContent = t("heroTitle");
+      document.getElementById("uiHeroSubtitle").textContent = t("heroSubtitle");
+      
+      document.getElementById("lblNavMembers").textContent = t("navMembers");
+      document.getElementById("uiModalMembersTitle").textContent = t("membersModalTitle");
+      document.getElementById("uiModalMembersSub").textContent = t("membersModalSub");
+      document.getElementById("modalNewMemberInput").placeholder = t("addMemberPh");
+      document.getElementById("uiModalAddMemberBtn").textContent = t("addMemberBtn");
+
+      document.getElementById("uiAddTitle").textContent = t("addTitle");
+
+      document.getElementById("lblTitleRu").innerHTML = t("lblTitle") + " (RU) <span>*</span>";
+      document.getElementById("lblAuthorRu").innerHTML = t("lblAuthor") + " (RU) <span>*</span>";
+      document.getElementById("lblGenreRu").textContent = t("lblGenre") + " (RU)";
+      document.getElementById("lblDescRu").textContent = t("lblDesc") + " (RU)";
+
+      document.getElementById("lblTitleHy").innerHTML = t("lblTitle") + " (HY) <span>*</span>";
+      document.getElementById("lblAuthorHy").innerHTML = t("lblAuthor") + " (HY) <span>*</span>";
+      document.getElementById("lblGenreHy").textContent = t("lblGenre") + " (HY)";
+      document.getElementById("lblDescHy").textContent = t("lblDesc") + " (HY)";
+
+      document.getElementById("lblTitleEn").innerHTML = t("lblTitle") + " (EN) <span>*</span>";
+      document.getElementById("lblAuthorEn").innerHTML = t("lblAuthor") + " (EN) <span>*</span>";
+      document.getElementById("lblGenreEn").textContent = t("lblGenre") + " (EN)";
+      document.getElementById("lblDescEn").textContent = t("lblDesc") + " (EN)";
+
+      document.getElementById("title_ru").placeholder = t("phTitle");
+      document.getElementById("author_ru").placeholder = t("phAuthor");
+      document.getElementById("genre_ru").placeholder = t("phGenre");
+      document.getElementById("desc_ru").placeholder = t("phDesc");
+
+      document.getElementById("title_hy").placeholder = t("phTitle");
+      document.getElementById("author_hy").placeholder = t("phAuthor");
+      document.getElementById("genre_hy").placeholder = t("phGenre");
+      document.getElementById("desc_hy").placeholder = t("phDesc");
+
+      document.getElementById("title_en").placeholder = t("phTitle");
+      document.getElementById("author_en").placeholder = t("phAuthor");
+      document.getElementById("genre_en").placeholder = t("phGenre");
+      document.getElementById("desc_en").placeholder = t("phDesc");
+
+      document.getElementById("lblYear").textContent = t("lblYear");
+      document.getElementById("lblQuantity").textContent = t("lblQuantity");
+      document.getElementById("uiAddBtn").textContent = t("addBtn");
+      document.getElementById("uiCatalogTitle").textContent = t("catalogTitle");
+      document.getElementById("uiFooterText").textContent = t("footerText");
+      document.getElementById("uiModalTitle").textContent = t("modalTitle");
+      document.getElementById("uiDetailsTitle").textContent = t("detailsTitle");
+      document.getElementById("uiEditTitle").textContent = t("editTitleModal");
+      document.getElementById("uiDeleteTitle").textContent = t("deleteTitle");
+      document.getElementById("uiLabelBorrower").textContent = t("labelBorrower");
+      document.getElementById("uiLabelNewBorrower").textContent = t("labelNewBorrower");
+      document.getElementById("uiCancelBtn").textContent = t("cancelBtn");
+      document.getElementById("uiConfirmBorrowBtn").textContent = t("confirmBorrowBtn");
+      document.getElementById("uiCloseDetailsBtn").textContent = t("closeBtn");
+      document.getElementById("uiSaveEditBtn").textContent = t("saveBtn");
+      document.getElementById("uiDeleteCancelBtn").textContent = t("cancelBtn");
+      document.getElementById("uiDeleteConfirmBtn").textContent = t("deleteBtn");
+
+      document.getElementById("searchInput").placeholder = t("searchPlaceholder");
+      document.getElementById("lblCntTotal").textContent = t("lblCntTotal");
+      document.getElementById("lblCntAvail").textContent = t("lblCntAvail");
+      document.getElementById("lblCntBorrow").textContent = t("lblCntBorrow");
+      document.getElementById("lblCntOverdue").textContent = t("lblCntOverdue");
+
+      document.getElementById("lblExport").textContent = t("exportBtn");
+      document.getElementById("lblImport").textContent = t("importBtn");
+
+      const statusSelect = document.getElementById("statusFilter");
+      statusSelect.options[0].text = t("allStatuses");
+      statusSelect.options[1].text = t("filterAvailable");
+      statusSelect.options[2].text = t("filterBorrowed");
+      statusSelect.options[3].text = t("filterOverdue");
+
+      const sortSelect = document.getElementById("sortSelect");
+      sortSelect.options[0].text = t("sortTitle");
+      sortSelect.options[1].text = t("sortAuthor");
+      sortSelect.options[2].text = t("sortDueDate");
+
+      updateGenreDropdown();
+      renderMembersModalList();
+      renderBooks();
+      updateCounters();
+    }
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentLang = btn.dataset.lang;
+        updateTexts();
+      });
+    });
+
+    function switchFormLang(lang) {
+      document.querySelectorAll(".form-tab-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".form-lang-pane").forEach(pane => pane.classList.remove("active"));
+      event.target.classList.add("active");
+      document.getElementById("pane_" + lang).classList.add("active");
+    }
+
+    function loadData() {
+      try {
+        const rawBooks = localStorage.getItem(STORAGE_KEY);
+        if (rawBooks) {
+          books = JSON.parse(rawBooks);
+          books.forEach(b => {
+            if (!b.borrowers) b.borrowers = [];
+            if (!b.history) b.history = [];
+          });
+        } else {
+          initDefaultBooks();
+        }
+
+        const rawMembers = localStorage.getItem(MEMBERS_KEY);
+        if (rawMembers) {
+          members = JSON.parse(rawMembers);
+        }
+      } catch (e) {
+        initDefaultBooks();
+      }
+    }
+
+    function initDefaultBooks() {
+      books = initialBooksData.map(item => ({
+        id: item.id,
+        year: item.year,
+        quantity: item.quantity,
+        theme: item.theme,
+        borrowers: [],
+        history: [],
+        translations: item.translations
+      }));
+      saveData();
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+      localStorage.setItem(MEMBERS_KEY, JSON.stringify(members));
+      updateGenreDropdown();
+      renderMembersModalList();
+      updateCounters();
+    }
+
+    function getMemberActiveBooksCount(memberName) {
+      let count = 0;
+      books.forEach(b => {
+        if (b.borrowers) {
+          count += b.borrowers.filter(br => br.name.toLowerCase() === memberName.toLowerCase()).length;
+        }
+      });
+      return count;
+    }
+
+    // Open Members Modal
+    function openMembersModal() {
+      renderMembersModalList();
+      document.getElementById("memberModalError").classList.remove("visible");
+      document.getElementById("modalNewMemberInput").value = "";
+      document.getElementById("membersModal").classList.add("open");
+    }
+
+    function closeMembersModal() {
+      document.getElementById("membersModal").classList.remove("open");
+    }
+
+    function renderMembersModalList() {
+      const container = document.getElementById("modalMembersContainer");
+      if (!container) return;
+
+      if (members.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--ink-soft); font-style: italic; padding: 20px;">Нет зарегистрированных читателей</div>`;
+        return;
+      }
+
+      container.innerHTML = members.map((m, idx) => {
+        const activeCount = getMemberActiveBooksCount(m);
+        const isFull = activeCount >= 3;
+        return `
+          <div class="member-item-row" onclick="openMemberDetails('${escapeHTML(m)}')">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>👤 <strong>${escapeHTML(m)}</strong></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="member-quota ${isFull ? 'limit-full' : ''}">${activeCount} / 3</span>
+              <button type="button" class="btn btn-delete btn-sm" style="padding: 2px 6px; font-size: 0.75rem;" onclick="event.stopPropagation(); removeMember(${idx})">✕</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function addMemberFromModal() {
+      const input = document.getElementById("modalNewMemberInput");
+      const errEl = document.getElementById("memberModalError");
+      errEl.classList.remove("visible");
+
+      const name = input.value.trim();
+      if (!name) return;
+
+      if (!members.some(m => m.toLowerCase() === name.toLowerCase())) {
+        members.push(name);
+        saveData();
+        renderMembersModalList();
+      }
+      input.value = "";
+    }
+
+    function removeMember(index) {
+      const memberName = members[index];
+      const errEl = document.getElementById("memberModalError");
+      errEl.classList.remove("visible");
+
+      if (getMemberActiveBooksCount(memberName) > 0) {
+        errEl.textContent = t("errMemberHasBooks");
+        errEl.classList.add("visible");
+        return;
+      }
+
+      members.splice(index, 1);
+      saveData();
+      renderMembersModalList();
+    }
+
+    // Open Specific Member Details Modal (Showing books borrowed, when borrowed, and due date)
+    function openMemberDetails(memberName) {
+      document.getElementById("memberDetailsName").textContent = `👤 ${memberName}`;
+      const contentEl = document.getElementById("memberDetailsContent");
+
+      let borrowedBooksList = [];
+      books.forEach(b => {
+        if (b.borrowers) {
+          b.borrowers.forEach(br => {
+            if (br.name.toLowerCase() === memberName.toLowerCase()) {
+              const bData = getBookData(b);
+              borrowedBooksList.push({
+                title: bData.title,
+                author: bData.author,
+                borrowDate: br.borrowDate,
+                dueDate: br.dueDate,
+                isOverdue: isOverdue(br.dueDate)
+              });
+            }
+          });
+        }
+      });
+
+      if (borrowedBooksList.length === 0) {
+        contentEl.innerHTML = `<div style="text-align: center; color: var(--ink-soft); font-style: italic; padding: 30px;">${t("noBooksBorrowed")}</div>`;
+      } else {
+        contentEl.innerHTML = borrowedBooksList.map(item => `
+          <div class="borrower-row ${item.isOverdue ? 'overdue-row' : ''}" style="padding: 10px 0; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              📚 <strong>${escapeHTML(item.title)}</strong> <small>(${escapeHTML(item.author)})</small><br>
+              <small>📤 ${t("borrowDate")}: ${item.borrowDate} | ⏳ ${t("dueDate")}: ${item.dueDate} ${item.isOverdue ? '⚠️' : ''}</small>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      document.getElementById("membersModal").classList.remove("open");
+      document.getElementById("memberDetailsModal").classList.add("open");
+    }
+
+    function closeMemberDetailsModal() {
+      document.getElementById("memberDetailsModal").classList.remove("open");
+      document.getElementById("membersModal").classList.add("open");
+    }
+
+    function formatDate(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const d = String(dateObj.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function escapeHTML(str) {
+      if (!str) return "";
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function getBookData(book) {
+      if (book.translations && book.translations[currentLang]) {
+        return book.translations[currentLang];
+      }
+      if (book.translations && book.translations.ru) {
+        return book.translations.ru;
+      }
+      return { title: "Без названия", author: "Неизвестен", genre: "", description: "" };
+    }
+
+    function updateGenreDropdown() {
+      const genreSelect = document.getElementById("genreFilter");
+      const currentSelected = genreSelect.value;
+      const genresSet = new Set();
+      books.forEach(b => {
+        const data = getBookData(b);
+        if (data.genre) genresSet.add(data.genre);
+      });
+
+      let html = `<option value="all">${t("allGenres")}</option>`;
+      genresSet.forEach(g => {
+        html += `<option value="${escapeHTML(g)}">${escapeHTML(g)}</option>`;
+      });
+      genreSelect.innerHTML = html;
+      genreSelect.value = genresSet.has(currentSelected) ? currentSelected : "all";
+    }
+
+    function updateCounters() {
+      let totalBooksCount = books.length;
+      let totalAvailable = 0;
+      let totalBorrowed = 0;
+      let totalOverdue = 0;
+
+      books.forEach(b => {
+        const total = b.quantity || 1;
+        const active = (b.borrowers || []).length;
+        const avail = Math.max(0, total - active);
+        totalAvailable += avail;
+        totalBorrowed += active;
+        if (bookHasOverdue(b)) totalOverdue++;
+      });
+
+      document.getElementById("cntTotalBooks").textContent = totalBooksCount;
+      document.getElementById("cntAvailBooks").textContent = totalAvailable;
+      document.getElementById("cntBorrowBooks").textContent = totalBorrowed;
+      document.getElementById("cntOverdueBooks").textContent = totalOverdue;
+    }
+
+    function getEarliestDueDate(book) {
+      if (!book.borrowers || book.borrowers.length === 0) return "9999-12-31";
+      let earliest = book.borrowers[0].dueDate;
+      book.borrowers.forEach(b => {
+        if (b.dueDate < earliest) earliest = b.dueDate;
+      });
+      return earliest;
+    }
+
+    function renderBooks() {
+      const listEl = document.getElementById("bookList");
+      const searchQuery = document.getElementById("searchInput").value.toLowerCase().trim();
+      const selectedGenre = document.getElementById("genreFilter").value;
+      const selectedStatus = document.getElementById("statusFilter").value;
+      const sortBy = document.getElementById("sortSelect").value;
+
+      let filtered = books.filter(book => {
+        const bData = getBookData(book);
+        const title = (bData.title || "").toLowerCase();
+        const author = (bData.author || "").toLowerCase();
+        
+        const matchesSearch = !searchQuery || title.includes(searchQuery) || author.includes(searchQuery);
+        const matchesGenre = selectedGenre === "all" || bData.genre === selectedGenre;
+
+        const total = book.quantity || 1;
+        const activeBorrows = (book.borrowers || []).length;
+        const availableCount = Math.max(0, total - activeBorrows);
+        const isAllBorrowed = availableCount === 0;
+        const isOverdueFlag = bookHasOverdue(book);
+
+        let matchesStatus = true;
+        if (selectedStatus === "available") {
+          matchesStatus = !isAllBorrowed;
+        } else if (selectedStatus === "borrowed") {
+          matchesStatus = activeBorrows > 0;
+        } else if (selectedStatus === "overdue") {
+          matchesStatus = isOverdueFlag;
+        }
+
+        return matchesSearch && matchesGenre && matchesStatus;
+      });
+
+      filtered.sort((a, b) => {
+        const dataA = getBookData(a);
+        const dataB = getBookData(b);
+        if (sortBy === "title") {
+          return (dataA.title || "").localeCompare(dataB.title || "");
+        } else if (sortBy === "author") {
+          return (dataA.author || "").localeCompare(dataB.author || "");
+        } else if (sortBy === "duedate") {
+          return getEarliestDueDate(a).localeCompare(getEarliestDueDate(b));
+        }
+        return 0;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <p>${t("empty")}</p>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map((book) => {
+        const total = book.quantity || 1;
+        const activeBorrows = (book.borrowers || []).length;
+        const availableCount = Math.max(0, total - activeBorrows);
+        const isAllBorrowed = availableCount === 0;
+        const isOverdueFlag = bookHasOverdue(book);
+
+        let ribbonClass = "ribbon-available";
+        let ribbonText = t("available");
+        if (isOverdueFlag) {
+          ribbonClass = "ribbon-overdue";
+          ribbonText = t("overdue");
+        } else if (isAllBorrowed) {
+          ribbonClass = "ribbon-borrowed";
+          ribbonText = t("borrowed");
+        }
+
+        const themeIdx = typeof book.theme === "number" ? book.theme : 0;
+        const bData = getBookData(book);
+
+        const yearTag = book.year ? `<span class="book-tag">📅 ${escapeHTML(String(book.year))}</span>` : "";
+        const genreTag = bData.genre ? `<span class="book-tag">🏷️ ${escapeHTML(bData.genre)}</span>` : "";
+        const qtyTag = `<span class="book-tag">📦 ${availableCount}/${total} ${t("pcs")}</span>`;
+        const tagsHtml = `<div class="book-meta-tags">${yearTag}${genreTag}${qtyTag}</div>`;
+        const descHtml = bData.description ? `<p class="book-description">${escapeHTML(bData.description)}</p>` : "";
+
+        let borrowMeta = "";
+        if (activeBorrows > 0) {
+          const lastBorrower = book.borrowers[book.borrowers.length - 1];
+          const overdueClass = isOverdue(lastBorrower.dueDate) ? "overdue-warning" : "";
+          borrowMeta = `
+            <div class="borrow-box ${overdueClass}">
+              👤 <strong>${t("borrower")}:</strong> ${escapeHTML(lastBorrower.name)} ${activeBorrows > 1 ? `(+${activeBorrows - 1})` : ""}<br>
+              ⏳ <strong>${t("dueDate")}:</strong> ${lastBorrower.dueDate} ${isOverdue(lastBorrower.dueDate) ? `(⚠️ ${t("overdue")})` : ""}
+            </div>
+          `;
+        }
+
+        const mainBtn = isAllBorrowed
+          ? `<button type="button" class="btn btn-rosewood btn-sm main-action" disabled style="opacity: 0.6; cursor: not-allowed;">🔒 ${t("borrowed")}</button>`
+          : `<button type="button" class="btn btn-rosewood btn-sm main-action" onclick="event.stopPropagation(); openBorrowModal('${book.id}')">📖 ${t("borrowBtn")}</button>`;
+
+        return `
+          <article class="book-card" onclick="openDetailsModal('${book.id}')" title="Кликните для подробной информации">
+            <div class="book-cover-stage">
+              <span class="book-status-ribbon ${ribbonClass}">${ribbonText}</span>
+              <div class="book-cover cover-theme-${themeIdx}">
+                <div class="book-cover-inner">
+                  <div class="cover-title">${escapeHTML(bData.title)}</div>
+                  <div class="cover-author">${escapeHTML(bData.author)}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="book-body">
+              <h3 class="book-title">${escapeHTML(bData.title)}</h3>
+              <div class="book-author">${escapeHTML(bData.author)}</div>
+              ${tagsHtml}
+              ${descHtml}
+              ${borrowMeta}
+
+              <div class="book-footer">
+                ${mainBtn}
+                <button type="button" class="btn btn-edit btn-sm" onclick="event.stopPropagation(); openEditModal('${book.id}')" title="${t("editBtn")}">✏️</button>
+                <button type="button" class="btn btn-delete btn-sm" onclick="event.stopPropagation(); openDeleteModal('${book.id}')" title="${t("deleteBtn")}">🗑️</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("searchInput").addEventListener("input", renderBooks);
+    document.getElementById("genreFilter").addEventListener("change", renderBooks);
+    document.getElementById("statusFilter").addEventListener("change", renderBooks);
+    document.getElementById("sortSelect").addEventListener("change", renderBooks);
+
+    function openDetailsModal(id) {
+      const book = books.find(b => b.id === id);
+      if (!book) return;
+
+      const bData = getBookData(book);
+      const total = book.quantity || 1;
+      const activeBorrows = (book.borrowers || []).length;
+      const availableCount = Math.max(0, total - activeBorrows);
+      const isOverdueFlag = bookHasOverdue(book);
+      
+      let statusText = `🟢 ${t("available")} (${availableCount}/${total})`;
+      if (isOverdueFlag) {
+        statusText = `🔴 <strong>${t("overdue")}</strong>`;
+      } else if (availableCount === 0) {
+        statusText = `🔴 ${t("borrowed")}`;
+      }
+
+      let contentHtml = `
+        <div class="details-item"><span class="details-label">${t("lblTitle")}</span><span class="details-value">${escapeHTML(bData.title)}</span></div>
+        <div class="details-item"><span class="details-label">${t("lblAuthor")}</span><span class="details-value">${escapeHTML(bData.author)}</span></div>
+        <div class="details-item"><span class="details-label">${t("year")}</span><span class="details-value">${escapeHTML(String(book.year || "-"))}</span></div>
+        <div class="details-item"><span class="details-label">${t("genre")}</span><span class="details-value">${escapeHTML(bData.genre || "-")}</span></div>
+        <div class="details-item"><span class="details-label">${t("totalQty")}</span><span class="details-value">${total} ${t("pcs")}</span></div>
+        <div class="details-item"><span class="details-label">${t("status")}</span><span class="details-value">${statusText}</span></div>
+      `;
+
+      contentHtml += `<div style="margin-top: 14px; font-weight: 700; color: var(--ink-soft);">${t("borrowersList")}</div>`;
+      if (activeBorrows === 0) {
+        contentHtml += `<div style="font-size: 0.85rem; color: var(--ink-soft); font-style: italic; margin-top: 4px;">${t("noBorrowers")}</div>`;
+      } else {
+        contentHtml += `<div class="borrowers-sublist">`;
+        book.borrowers.forEach((borrower, bIndex) => {
+          const rowOverdue = isOverdue(borrower.dueDate);
+          contentHtml += `
+            <div class="borrower-row ${rowOverdue ? 'overdue-row' : ''}">
+              <div>
+                👤 <strong>${escapeHTML(borrower.name)}</strong><br>
+                <small>📅 ${t("borrowDate")}: ${borrower.borrowDate} | ⏳ ${t("dueDate")}: ${borrower.dueDate} ${rowOverdue ? '⚠️' : ''}</small>
+              </div>
+              <button type="button" class="btn btn-sage btn-sm" style="padding: 4px 8px; font-size: 0.75rem; height: 28px;" onclick="returnSpecificBook('${book.id}', ${bIndex})">↩ ${t("returnBtn")}</button>
+            </div>
+          `;
+        });
+        contentHtml += `</div>`;
+      }
+
+      contentHtml += `<div style="margin-top: 16px; font-weight: 700; color: var(--ink-soft);">${t("historyList")}</div>`;
+      if (!book.history || book.history.length === 0) {
+        contentHtml += `<div style="font-size: 0.85rem; color: var(--ink-soft); font-style: italic; margin-top: 4px;">${t("noHistory")}</div>`;
+      } else {
+        contentHtml += `<div class="borrowers-sublist" style="background: var(--white);">`;
+        book.history.forEach(h => {
+          contentHtml += `
+            <div class="borrower-row" style="font-size: 0.8rem;">
+              <div>📚 <strong>${escapeHTML(h.name)}</strong></div>
+              <div><small>📤 ${h.borrowDate} → 📥 ${h.returnDate || '...'}</small></div>
+            </div>
+          `;
+        });
+        contentHtml += `</div>`;
+      }
+
+      if (bData.description) {
+        contentHtml += `<div class="details-desc-box"><strong>${t("description")}:</strong><br>${escapeHTML(bData.description)}</div>`;
+      }
+
+      document.getElementById("detailsContent").innerHTML = contentHtml;
+      document.getElementById("detailsModal").classList.add("open");
+    }
+
+    function closeDetailsModal() {
+      document.getElementById("detailsModal").classList.remove("open");
+    }
+
+    function returnSpecificBook(bookId, borrowerIndex) {
+      const book = books.find(b => b.id === bookId);
+      if (book && book.borrowers) {
+        const returned = book.borrowers.splice(borrowerIndex, 1)[0];
+        const histItem = book.history.find(h => h.name === returned.name && h.borrowDate === returned.borrowDate && !h.returnDate);
+        if (histItem) {
+          histItem.returnDate = formatDate(new Date());
+        }
+        saveData();
+        renderBooks();
+        openDetailsModal(bookId);
+      }
+    }
+
+    function openEditModal(id) {
+      const book = books.find(b => b.id === id);
+      if (!book) return;
+
+      const bData = getBookData(book);
+      document.getElementById("editBookId").value = book.id;
+      document.getElementById("editTitleInput").value = bData.title || "";
+      document.getElementById("editAuthorInput").value = bData.author || "";
+      document.getElementById("editYearInput").value = book.year || "";
+      document.getElementById("editError").classList.remove("visible");
+      document.getElementById("editModal").classList.add("open");
+    }
+
+    function closeEditModal() {
+      document.getElementById("editModal").classList.remove("open");
+    }
+
+    document.getElementById("editForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const id = document.getElementById("editBookId").value;
+      const title = document.getElementById("editTitleInput").value.trim();
+      const author = document.getElementById("editAuthorInput").value.trim();
+      const year = document.getElementById("editYearInput").value.trim();
+
+      if (!title || !author) {
+        const errEl = document.getElementById("editError");
+        errEl.textContent = t("errTitleAuthor");
+        errEl.classList.add("visible");
+        return;
+      }
+
+      const book = books.find(b => b.id === id);
+      if (book) {
+        if (!book.translations[currentLang]) book.translations[currentLang] = {};
+        book.translations[currentLang].title = title;
+        book.translations[currentLang].author = author;
+        book.year = year;
+        saveData();
+        renderBooks();
+        closeEditModal();
+      }
+    });
+
+    function openDeleteModal(id) {
+      const book = books.find(b => b.id === id);
+      if (!book) return;
+
+      if (book.borrowers && book.borrowers.length > 0) {
+        document.getElementById("uiDeleteTitle").textContent = "⚠️ " + t("deleteTitle");
+        document.getElementById("uiDeleteText").textContent = t("errBorrowedDel");
+        document.getElementById("deleteBookId").value = "";
+        document.getElementById("uiDeleteConfirmBtn").style.display = "none";
+        document.getElementById("deleteModal").classList.add("open");
+        return;
+      }
+
+      const bData = getBookData(book);
+      document.getElementById("uiDeleteTitle").textContent = t("deleteTitle");
+      document.getElementById("uiDeleteText").textContent = t("confirmDelMsg") + ` («${bData.title}» - ${bData.author})`;
+      document.getElementById("deleteBookId").value = book.id;
+      document.getElementById("uiDeleteConfirmBtn").style.display = "inline-flex";
+      document.getElementById("deleteModal").classList.add("open");
+    }
+
+    function closeDeleteModal() {
+      document.getElementById("deleteModal").classList.remove("open");
+    }
+
+    function confirmDeleteBook() {
+      const id = document.getElementById("deleteBookId").value;
+      if (!id) {
+        closeDeleteModal();
+        return;
+      }
+      books = books.filter(b => b.id !== id);
+      saveData();
+      renderBooks();
+      closeDeleteModal();
+    }
+
+    document.getElementById("addBookForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById("formError");
+      errEl.classList.remove("visible");
+
+      const tRu = document.getElementById("title_ru").value.trim();
+      const aRu = document.getElementById("author_ru").value.trim();
+      const gRu = document.getElementById("genre_ru").value.trim();
+      const dRu = document.getElementById("desc_ru").value.trim();
+
+      const tHy = document.getElementById("title_hy").value.trim();
+      const aHy = document.getElementById("author_hy").value.trim();
+      const gHy = document.getElementById("genre_hy").value.trim();
+      const dHy = document.getElementById("desc_hy").value.trim();
+
+      const tEn = document.getElementById("title_en").value.trim();
+      const aEn = document.getElementById("author_en").value.trim();
+      const gEn = document.getElementById("genre_en").value.trim();
+      const dEn = document.getElementById("desc_en").value.trim();
+
+      if (!tRu && !tHy && !tEn) {
+        errEl.textContent = t("errTitleAuthor");
+        errEl.classList.add("visible");
+        return;
+      }
+
+      const year = document.getElementById("bookYear").value.trim();
+      const quantity = parseInt(document.getElementById("bookQuantity").value) || 3;
+
+      const newBook = {
+        id: "bk_" + Date.now() + "_" + Math.random().toString(36).slice(2, 5),
+        year,
+        quantity,
+        borrowers: [],
+        history: [],
+        theme: books.length % 4,
+        translations: {
+          ru: { title: tRu || tEn || tHy, author: aRu || aEn || aHy, genre: gRu, description: dRu },
+          hy: { title: tHy || tRu || tEn, author: aHy || aRu || aEn, genre: gHy, description: dHy },
+          en: { title: tEn || tRu || tHy, author: aEn || aRu || aHy, genre: gEn, description: dEn }
+        }
+      };
+
+      books.unshift(newBook);
+      saveData();
+      renderBooks();
+      document.getElementById("addBookForm").reset();
+      document.getElementById("bookQuantity").value = "3";
+    });
+
+    function openBorrowModal(id) {
+      const book = books.find(b => b.id === id);
+      if (!book) return;
+
+      const total = book.quantity || 1;
+      const activeBorrows = (book.borrowers || []).length;
+      if (activeBorrows >= total) {
+        alert(t("allBorrowedAlert"));
+        return;
+      }
+
+      const bData = getBookData(book);
+      document.getElementById("borrowBookId").value = book.id;
+      document.getElementById("modalBookName").textContent = `«${bData.title}» — ${bData.author} (${t("availableLeft")} ${total - activeBorrows}/${total})`;
+      document.getElementById("newBorrowerName").value = "";
+      document.getElementById("borrowError").classList.remove("visible");
+
+      const selectEl = document.getElementById("borrowerSelect");
+      selectEl.innerHTML = members.map(m => `<option value="${escapeHTML(m)}">${escapeHTML(m)} (${getMemberActiveBooksCount(m)}/3)</option>`).join("");
+
+      document.getElementById("borrowModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("borrowModal").classList.remove("open");
+    }
+
+    document.getElementById("borrowForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById("borrowError");
+      errEl.classList.remove("visible");
+
+      const id = document.getElementById("borrowBookId").value;
+      const newMemberInput = document.getElementById("newBorrowerName").value.trim();
+      const selectedMember = document.getElementById("borrowerSelect").value;
+
+      const borrowerName = newMemberInput || selectedMember;
+      if (!borrowerName) {
+        errEl.textContent = t("errBorrower");
+        errEl.classList.add("visible");
+        return;
+      }
+
+      if (newMemberInput && !members.some(m => m.toLowerCase() === newMemberInput.toLowerCase())) {
+        members.push(newMemberInput);
+      }
+
+      if (getMemberActiveBooksCount(borrowerName) >= 3) {
+        errEl.textContent = t("errLimit");
+        errEl.classList.add("visible");
+        return;
+      }
+
+      const book = books.find(b => b.id === id);
+      if (book) {
+        const total = book.quantity || 1;
+        if (!book.borrowers) book.borrowers = [];
+
+        if (book.borrowers.length >= total) {
+          alert(t("allBorrowedAlert"));
+          closeModal();
+          return;
+        }
+
+        const today = new Date();
+        const due = new Date();
+        due.setDate(today.getDate() + 14);
+
+        const borrowRecord = {
+          name: borrowerName,
+          borrowDate: formatDate(today),
+          dueDate: formatDate(due)
+        };
+
+        book.borrowers.push(borrowRecord);
+        if (!book.history) book.history = [];
+        book.history.push({
+          name: borrowerName,
+          borrowDate: formatDate(today),
+          returnDate: null
+        });
+
+        saveData();
+        renderBooks();
+        closeModal();
+      }
+    });
+
+    function exportBackup() {
+      const data = { books, members };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `bibliotheca_backup_${formatDate(new Date())}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed.books && Array.isArray(parsed.books)) {
+            books = parsed.books;
+            if (parsed.members && Array.isArray(parsed.members)) {
+              members = parsed.members;
+            }
+            saveData();
+            updateTexts();
+          }
+        } catch (err) {
+          console.error(err);
+        }
+        event.target.value = "";
+      };
+      reader.readAsText(file);
+    }
+
+    loadData();
+    updateTexts();
+  </script>
+</body>
+</html>
